@@ -1,0 +1,5 @@
+<RCC>
+  <qresource prefix="/qworship">
+	<file>qml/qworship.qml</file>
+  </qresource>
+</RCC>
