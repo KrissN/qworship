@@ -2,8 +2,11 @@
 #include <QtGui/QScreen>
 #include <QtQml/QQmlEngine>
 #include <QtQml/QQmlComponent>
+#include <QtQml/QQmlContext>
 #include <QtQuick/QQuickWindow>
 #include <QtCore/QDebug>
+#include <QtCore/QTranslator>
+#include <QtCore/QLibraryInfo>
 
 int main(int argc, char** argv)
 {
@@ -15,12 +18,24 @@ int main(int argc, char** argv)
                                           Qt::InvertedLandscapeOrientation | Qt::InvertedPortraitOrientation);
     }
 
+    QTranslator qtTrans;
+    qtTrans.load("qt_" + QLocale::system().name(), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+    app.installTranslator(&qtTrans);
+
+    QTranslator appTrans;
+    appTrans.load(":///lang/qworship" + QLocale::system().name());
+    app.installTranslator(&appTrans);
+
     QQmlEngine engine;
     QQmlComponent component(&engine);
     QQuickWindow::setDefaultAlphaBuffer(true);
-    component.loadUrl(QUrl("qrc:///qworship/qml/qworship.qml"));
+    QQmlContext *pContext = new QQmlContext(engine.rootContext());
+    pContext->setContextProperty("screenPixelDensity", QGuiApplication::primaryScreen()->physicalDotsPerInch() *
+                                 QGuiApplication::primaryScreen()->devicePixelRatio());
+
+    component.loadUrl(QUrl("qrc:///qml/qworship.qml"));
     if (component.isReady())
-        component.create();
+        component.create(pContext);
     else
         qWarning() << component.errorString();
 

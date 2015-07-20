@@ -3,7 +3,7 @@ import QtQuick.Window 2.2
 
 Window {
     id: mainwindow
-    title: "Main Window"
+    title: qsTr("Main Window")
     visible: true
     width: 400
     height: 400
