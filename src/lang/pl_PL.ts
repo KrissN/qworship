@@ -7,5 +7,17 @@
         <source>Main Window</source>
         <translation>Okno główne</translation>
     </message>
+    <message>
+        <source>LIVE</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SEQUENCE</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>SETTINGS</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>
