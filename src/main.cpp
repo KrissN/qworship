@@ -30,7 +30,7 @@ int main(int argc, char** argv)
     QQmlComponent component(&engine);
     QQuickWindow::setDefaultAlphaBuffer(true);
     QQmlContext *pContext = new QQmlContext(engine.rootContext());
-    pContext->setContextProperty("screenPixelDensity", QGuiApplication::primaryScreen()->physicalDotsPerInch() *
+    pContext->setContextProperty("screenPixelDensity", QGuiApplication::primaryScreen()->logicalDotsPerInch() *
                                  QGuiApplication::primaryScreen()->devicePixelRatio());
 
     component.loadUrl(QUrl("qrc:///qml/qworship.qml"));
