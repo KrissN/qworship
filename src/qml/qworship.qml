@@ -57,7 +57,12 @@ Window {
                 anchors.fill: parent
                 hoverEnabled: true
                 onClicked: {
-                    tabRect.ListView.view.currentIndex = index
+                    var oldIndex = tabRect.ListView.view.currentIndex;
+                    tabRect.ListView.view.currentIndex = index;
+                    tabObjects[oldIndex].state = "hidden";
+                    tabObjects[oldIndex].z = 1.0;
+                    tabObjects[index].state = "visible";
+                    tabObjects[index].z = 2.0;
                 }
             }
 
@@ -68,7 +73,6 @@ Window {
                 anchors.centerIn: parent
                 color: colorTabText
             }
-
 
             states: [
                 State {
@@ -111,6 +115,49 @@ Window {
             highlightMoveVelocity: 2000.0
         }
     }
+
+    Rectangle {
+        id: content
+        width: parent.width
+        anchors.top: tabbar.bottom
+        anchors.bottom: parent.bottom
+
+        TabItem {
+            id: tabLive
+            anchors.fill: parent
+            state: "visible"
+
+            TabLive { id: tabLiveContent; anchors.fill: parent }
+        }
+        TabItem {
+            id: tabSequence
+            anchors.fill: parent
+            state: "hidden"
+
+            TabSequence { id: tabSequenceContent; anchors.fill: parent }
+        }
+        TabItem {
+            id: tabLyrics
+            anchors.fill: parent
+            state: "hidden"
+
+            TabLyrics { id: tabLyricsContent; anchors.fill: parent }
+        }
+        TabItem {
+            id: tabSettings
+            anchors.fill: parent
+            state: "hidden"
+
+            TabSettings { id: tabSettingsContent; anchors.fill: parent }
+        }
+    }
+
+    property var tabObjects: [
+        tabLive,
+        tabSequence,
+        tabLyrics,
+        tabSettings
+    ]
 
     /*Rectangle {
         anchors.fill: parent

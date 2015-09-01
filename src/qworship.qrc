@@ -1,5 +1,10 @@
 <RCC>
   <qresource prefix="/">
 	<file>qml/qworship.qml</file>
+	<file>qml/TabItem.qml</file>
+	<file>qml/TabLive.qml</file>
+	<file>qml/TabSequence.qml</file>
+	<file>qml/TabLyrics.qml</file>
+	<file>qml/TabSettings.qml</file>
   </qresource>
 </RCC>

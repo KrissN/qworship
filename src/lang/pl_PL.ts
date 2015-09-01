@@ -19,5 +19,9 @@
         <source>SETTINGS</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>LYRICS</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>
