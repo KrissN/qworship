@@ -5,9 +5,9 @@ Window {
     id: mainwindow
     title: qsTr("Main Window")
     visible: true
-    width: 400
+    width: 800
     height: 400
-    minimumWidth: 400
+    minimumWidth: 800
     minimumHeight: 400
 
     function dp(val) {
@@ -29,12 +29,14 @@ Window {
     property real uiTrpTabText: 1.0;
     property real uiSatTabBkgndAct: 256.0 / 256.0;
     property real uiTrpTabBkgndAct: 1.0;
+    property real uiSatPreviewBkgnd: 400.0 / 256.0;
 
     property color colorTabBkgnd: mkColor(uiClrHue, uiClrVal, uiSatTabBkgnd, uiTrpTabText)
     property color colorTabText: mkColor(uiClrHue, uiClrVal, uiSatTabText, uiTrpTabText)
     property color colorTabItemBkgnd: mkColor(uiClrHue, uiClrVal, uiSatTabBkgnd, 0.0)
     property color colorTabItemBkgndHover: mkColor(uiClrHue, uiClrVal, uiSatTabBkgndAct, 1.0)
     property color colorTabItemBkgndActive: mkColor(uiClrHue, uiClrVal, uiSatTabBkgndAct, 0.6)
+    property color colorPreviewBkgnt: mkColor(uiClrHue, uiClrVal, uiSatPreviewBkgnd, 1.0)
 
     ListModel {
         id: tabbarModel
@@ -118,7 +120,7 @@ Window {
 
     Rectangle {
         id: content
-        width: parent.width
+        width: parent.width * 0.7
         anchors.top: tabbar.bottom
         anchors.bottom: parent.bottom
 
@@ -150,6 +152,16 @@ Window {
 
             TabSettings { id: tabSettingsContent; anchors.fill: parent }
         }
+    }
+
+    Rectangle {
+        id: preview
+        anchors.left: content.right
+        anchors.right: parent.right
+        anchors.top: tabbar.bottom
+        anchors.bottom: parent.bottom
+
+        color: colorPreviewBkgnt
     }
 
     property var tabObjects: [
