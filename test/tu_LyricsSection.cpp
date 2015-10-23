@@ -40,12 +40,163 @@ void TuLyricsSection::setText_data()
     QTest::addColumn<QString>("htmlText");
     QTest::addColumn<QString>("titleText");
 
-    QTest::newRow("empty") << "" << -1 << "" << "" << "";
-    QTest::newRow("one line - no tags") << "some text" << -1 << "some text" << "some text" << "some text";
-    QTest::newRow("multi line - no tags") << "some text\nmore text" << -1 << "some text\nmore text"
-                                          << "some text\nmore text" << "some text";
-    QTest::newRow("one line - bold tag") << "some [b]bold[/b] text" << -1 << "some bold text"
-                                         << "some <b>bold</b> text" << "some bold text";
+    QTest::newRow("empty")
+        << ""
+        << -1
+        << ""
+        << ""
+        << "";
+    QTest::newRow("one line - no tags")
+        << "some text"
+        << -1
+        << "some text"
+        << "some text"
+        << "some text";
+    QTest::newRow("multi line - no tags")
+        << "some text\nmore text"
+        << -1
+        << "some text\nmore text"
+        << "some text<br/>more text"
+        << "some text";
+    QTest::newRow("one line - bold tag")
+        << "some [b]bold[/b] text"
+        << -1
+        << "some bold text"
+        << "some <b>bold</b> text"
+        << "some bold text";
+    QTest::newRow("one line - italic tag")
+        << "some [i]italic[/i] text"
+        << -1
+        << "some italic text"
+        << "some <i>italic</i> text"
+        << "some italic text";
+    QTest::newRow("one line - underline tag")
+        << "some [u]underline[/u] text"
+        << -1
+        << "some underline text"
+        << "some <u>underline</u> text"
+        << "some underline text";
+    QTest::newRow("one line - red colour tag")
+        << "some [color=red]red[/color] text"
+        << -1
+        << "some red text"
+        << "some <span style=\"color: red\">red</span> text"
+        << "some red text";
+    QTest::newRow("one line - colour tag without argument")
+        << "some [color]red[/color] text"
+        << 12
+        << ""
+        << ""
+        << "";
+    QTest::newRow("one line - text size 10")
+        << "some [size=10]large[/size] text"
+        << 14
+        << ""
+        << ""
+        << "";
+    QTest::newRow("one line - text size 9")
+        << "some [size=9]large[/size] text"
+        << -1
+        << "some large text"
+        << "some <span style=\"font-size: 150%\">large</span> text"
+        << "some large text";
+    QTest::newRow("one line - text size 8")
+        << "some [size=8]large[/size] text"
+        << -1
+        << "some large text"
+        << "some <span style=\"font-size: 137%\">large</span> text"
+        << "some large text";
+    QTest::newRow("one line - text size 7")
+        << "some [size=7]large[/size] text"
+        << -1
+        << "some large text"
+        << "some <span style=\"font-size: 125%\">large</span> text"
+        << "some large text";
+    QTest::newRow("one line - text size 6")
+        << "some [size=6]large[/size] text"
+        << -1
+        << "some large text"
+        << "some <span style=\"font-size: 112%\">large</span> text"
+        << "some large text";
+    QTest::newRow("one line - text size 5 (normal)")
+        << "some [size=5]normal[/size] text"
+        << -1
+        << "some normal text"
+        << "some <span style=\"font-size: 100%\">normal</span> text"
+        << "some normal text";
+    QTest::newRow("one line - text size 4")
+        << "some [size=4]small[/size] text"
+        << -1
+        << "some small text"
+        << "some <span style=\"font-size: 87%\">small</span> text"
+        << "some small text";
+    QTest::newRow("one line - text size 3")
+        << "some [size=3]small[/size] text"
+        << -1
+        << "some small text"
+        << "some <span style=\"font-size: 75%\">small</span> text"
+        << "some small text";
+    QTest::newRow("one line - text size 2")
+        << "some [size=2]small[/size] text"
+        << -1
+        << "some small text"
+        << "some <span style=\"font-size: 62%\">small</span> text"
+        << "some small text";
+    QTest::newRow("one line - text size 1")
+        << "some [size=1]small[/size] text"
+        << -1
+        << "some small text"
+        << "some <span style=\"font-size: 50%\">small</span> text"
+        << "some small text";
+    QTest::newRow("one line - text size 0")
+        << "some [size=0]small[/size] text"
+        << 13
+        << ""
+        << ""
+        << "";
+    QTest::newRow("one line - text without size")
+        << "some [size]small[/size] text"
+        << 11
+        << ""
+        << ""
+        << "";
+    QTest::newRow("multi line - two tags")
+        << "some [b]bold[/b] text\nmore [i]italic[/i] text"
+        << -1
+        << "some bold text\nmore italic text"
+        << "some <b>bold</b> text<br/>more <i>italic</i> text"
+        << "some bold text";
+    QTest::newRow("multi line - break within tag")
+        << "some [b]bold\nbold[/b] text"
+        << -1
+        << "some bold\nbold text"
+        << "some <b>bold<br/>bold</b> text"
+        << "some bold";
+    QTest::newRow("one line - nested tags")
+        << "some [b]bold [i]italic[/i][/b] text"
+        << -1
+        << "some bold italic text"
+        << "some <b>bold <i>italic</i></b> text"
+        << "some bold italic text";
+    QTest::newRow("one line - invalid tag nesting")
+        << "some [b]bold [i]italic[/b][/i] text"
+        << 25
+        << ""
+        << ""
+        << "";
+    QTest::newRow("one line - no tag close")
+        << "some [b]bold [i]italic[/i] text"
+        << 31
+        << ""
+        << ""
+        << "";
+    QTest::newRow("one line - extra tag close")
+        << "some bold italic[/i] text"
+        << 17
+        << ""
+        << ""
+        << "";
+
 }
 
 void TuLyricsSection::setText()
@@ -63,7 +214,15 @@ void TuLyricsSection::setText()
 
     QCOMPARE(pSection->setText(rawText), status);
 
-    QCOMPARE(pSection->text(), rawText);
+    if (status == -1)
+    {
+        QCOMPARE(pSection->text(), rawText);
+    }
+    else
+    {
+        QCOMPARE(pSection->text(), QString());
+    }
+
     QCOMPARE(pSection->strippedText(), strippedText);
     QCOMPARE(pSection->htmlText(), htmlText);
     QCOMPARE(pSection->titleText(), titleText);
