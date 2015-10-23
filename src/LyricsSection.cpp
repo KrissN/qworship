@@ -104,6 +104,7 @@ int LyricsSection::setText(QString text)
 QString LyricsSection::bbParseTag(QString::const_iterator & it, QString::const_iterator end) const
 {
     QString tag;
+    QString tagparam;
     QString content;
 
     // Upon entering the function the caller would have consumed the opening sqare bracket and
@@ -118,7 +119,7 @@ QString LyricsSection::bbParseTag(QString::const_iterator & it, QString::const_i
             it++;
             break;
         }
-        else if (!c.isLetterOrNumber())
+        else if (!c.isLetterOrNumber() && (c != '='))
         {
             throw TextParseException(it, tr("Invalid character in opening tag name: ") + c);
         }
@@ -129,12 +130,20 @@ QString LyricsSection::bbParseTag(QString::const_iterator & it, QString::const_i
         // Reached end of string before tag close.
         throw TextParseException(it, tr("Reached end of string before tag close"));
     }
-    QStringList htmlTags = bbTag2Html(tag);
-    if (htmlTags.empty())
+    QStringList tagval = tag.split('=');
+    tag = tagval[0];
+    QString val;
+    if (tagval.size() == 2)
     {
-        // Unknown tag
-        throw TextParseException(it, tr("Unknown tag: ") + tag);
+        val = tagval[1];
     }
+    else if (tagval.size() > 2)
+    {
+        throw TextParseException(it, tr("Incorrect tag parameter."));
+    }
+
+
+    QStringList htmlTags = bbTag2Html(it, tag, val);
 
     // Read the contents inside the tag.
     for ( ; it != end; it++)
@@ -196,11 +205,11 @@ QString LyricsSection::bbParseTag(QString::const_iterator & it, QString::const_i
     throw TextParseException(it, tr("Reached end of string before tag close"));
 }
 
-QStringList LyricsSection::bbTag2Html(QString tag) const
+QStringList LyricsSection::bbTag2Html(QString::const_iterator & it, QString tag, QString arg) const
 {
     if (tag.isEmpty())
     {
-        return QStringList();
+        throw TextParseException(it, tr("Empty tag name"));
     }
 
     switch (tag[0].toLatin1()) {
@@ -214,5 +223,5 @@ QStringList LyricsSection::bbTag2Html(QString tag) const
             break;
     }
 
-    return QStringList();
+    throw TextParseException(it, tr("Unknown tag: ") + tag);
 }

@@ -69,6 +69,6 @@ private:
     int parseErrorChar;
 
     QString bbParseTag(QString::const_iterator & it, QString::const_iterator end) const;
-    QStringList bbTag2Html(QString tag) const;
+    QStringList bbTag2Html(QString::const_iterator & it, QString tag, QString arg) const;
 };
 
