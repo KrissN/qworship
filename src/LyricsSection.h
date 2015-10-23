@@ -19,11 +19,13 @@
 
 #pragma once
 
+#include <QtCore/QObject>
 #include <QtCore/QString>
 #include <QtCore/QStringList>
 
-class LyricsSection
+class LyricsSection : public QObject
 {
+    Q_OBJECT
 public:
     enum SectionFlags
     {
@@ -37,8 +39,8 @@ public:
         LeftAlign = 0x0002
     };
 
-    LyricsSection();
-    LyricsSection(QString text, QString label, SectionFlags flags);
+    LyricsSection(QObject *pParent = 0);
+    LyricsSection(QObject *pParent, QString text, QString label, SectionFlags flags);
     ~LyricsSection();
 
     QString text() const { return mText; };

@@ -34,12 +34,13 @@ public:
     QString msg;
 };
 
-LyricsSection::LyricsSection()
+LyricsSection::LyricsSection(QObject *pParent)
+    : QObject(pParent)
 {
 }
 
-LyricsSection::LyricsSection(QString text, QString label, SectionFlags flags)
-    : mText(text), mLabel(label), mFlags(flags)
+LyricsSection::LyricsSection(QObject *pParent, QString text, QString label, SectionFlags flags)
+    : QObject(pParent), mText(text), mLabel(label), mFlags(flags)
 {
     setText(mText);
 }
@@ -75,7 +76,7 @@ int LyricsSection::setText(QString text)
                 if (*it == '/')
                 {
                     // No tag closures at top level
-                    throw TextParseException(it, "No tag closure at top level");
+                    throw TextParseException(it, tr("Unmatched tag closure at top level"));
                 }
                 else
                 {
@@ -119,20 +120,20 @@ QString LyricsSection::bbParseTag(QString::const_iterator & it, QString::const_i
         }
         else if (!c.isLetterOrNumber())
         {
-            throw TextParseException(it, QString("Invalid character in opening tag name: ") + c);
+            throw TextParseException(it, tr("Invalid character in opening tag name: ") + c);
         }
         tag += c;
     }
     if (it == end)
     {
         // Reached end of string before tag close.
-        throw TextParseException(it, "Reached end of string before tag close");
+        throw TextParseException(it, tr("Reached end of string before tag close"));
     }
     QStringList htmlTags = bbTag2Html(tag);
     if (htmlTags.empty())
     {
         // Unknown tag
-        throw TextParseException(it, QString("Unknown tag: ") + tag);
+        throw TextParseException(it, tr("Unknown tag: ") + tag);
     }
 
     // Read the contents inside the tag.
@@ -160,19 +161,19 @@ QString LyricsSection::bbParseTag(QString::const_iterator & it, QString::const_i
                     }
                     else if (!c.isLetterOrNumber())
                     {
-                        throw TextParseException(it, QString("Invalid character in closing tag name: ") + c);;
+                        throw TextParseException(it, tr("Invalid character in closing tag name: ") + c);;
                     }
                     tag2 += c;
                 }
                 if (it == end)
                 {
                     // Reached end of string before tag close.
-                    throw TextParseException(it, "Reached end of string before tag close");
+                    throw TextParseException(it, tr("Reached end of string before tag close"));
                 }
 
                 if (tag != tag2)
                 {
-                    throw TextParseException(it, "Tag opening/closure mismatch");
+                    throw TextParseException(it, tr("Tag opening/closure mismatch"));
                 }
                 else
                 {
@@ -192,7 +193,7 @@ QString LyricsSection::bbParseTag(QString::const_iterator & it, QString::const_i
     }
 
     // Reached end of string before tag close.
-    throw TextParseException(it, "Reached end of string before tag close");
+    throw TextParseException(it, tr("Reached end of string before tag close"));
 }
 
 QStringList LyricsSection::bbTag2Html(QString tag) const
