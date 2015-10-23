@@ -219,6 +219,47 @@ QStringList LyricsSection::bbTag2Html(QString::const_iterator & it, QString tag,
                 return QStringList() << "<b>" << "</b>";
             }
             break;
+        case 'i':
+            if (tag == "i")
+            {
+                return QStringList() << "<i>" << "</i>";
+            }
+            break;
+        case 'u':
+            if (tag == "u")
+            {
+                return QStringList() << "<u>" << "</u>";
+            }
+            break;
+        case 'c':
+            if (tag == "color")
+            {
+                if (arg.isEmpty())
+                {
+                    throw TextParseException(it, tr("This tag requires an argument"));
+                }
+                return QStringList() << "<span style=\"color: " + arg + "\">" << "</span>";
+            }
+            break;
+        case 's':
+            if (tag == "size")
+            {
+                if (arg.isEmpty())
+                {
+                    throw TextParseException(it, tr("This tag requires an argument"));
+                }
+                bool ok;
+                int sizeval = arg.toInt(&ok);
+                if (!ok || (sizeval > 9) || (sizeval < 1))
+                {
+                    throw TextParseException(it, tr("Font size out of range (1-9)"));
+                }
+
+                // Convert the number to percentage. A value of 5 indicates 100%, 1 - 50%, 9 - 150%.
+                uint sizeperc = 100 + ((sizeval - 5) * (50.0 / 4.0));
+
+                return QStringList() << "<span style=\"font-size: " + QString::number(sizeperc) + "%\">" << "</span>";
+            }
         default:
             break;
     }
