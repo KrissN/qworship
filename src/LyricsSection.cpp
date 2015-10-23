@@ -84,6 +84,10 @@ int LyricsSection::setText(QString text)
                     content += bbParseTag(it, end);
                 }
             }
+            else if (c == '\n')
+            {
+                content += "<br/>";
+            }
             else
             {
                 content += c;
@@ -194,6 +198,10 @@ QString LyricsSection::bbParseTag(QString::const_iterator & it, QString::const_i
                 // Found a nested tag. Make a recursive call to process it.
                 content += bbParseTag(it, end);
             }
+        }
+        else if (c == '\n')
+        {
+            content += "<br/>";
         }
         else
         {
