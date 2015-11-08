@@ -19,21 +19,21 @@ int main(int argc, char** argv)
     }
 
     QTranslator qtTrans;
-    qtTrans.load("qt_" + QLocale::system().name(), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+    qtTrans.load(QStringLiteral("qt_") + QLocale::system().name(), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
     app.installTranslator(&qtTrans);
 
     QTranslator appTrans;
-    appTrans.load(":///lang/qworship" + QLocale::system().name());
+    appTrans.load(QStringLiteral(":///lang/qworship") + QLocale::system().name());
     app.installTranslator(&appTrans);
 
     QQmlEngine engine;
     QQmlComponent component(&engine);
     QQuickWindow::setDefaultAlphaBuffer(true);
     QQmlContext *pContext = new QQmlContext(engine.rootContext());
-    pContext->setContextProperty("screenPixelDensity", QGuiApplication::primaryScreen()->logicalDotsPerInch() *
+    pContext->setContextProperty(QStringLiteral("screenPixelDensity"), QGuiApplication::primaryScreen()->logicalDotsPerInch() *
                                  QGuiApplication::primaryScreen()->devicePixelRatio());
 
-    component.loadUrl(QUrl("qrc:///qml/qworship.qml"));
+    component.loadUrl(QUrl(QStringLiteral("qrc:///qml/qworship.qml")));
     if (component.isReady())
         component.create(pContext);
     else

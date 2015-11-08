@@ -22,7 +22,7 @@
 
 #include "LyricsSection.h"
 
-static const QRegularExpression bbStripRe = QRegularExpression("\\[[^\\]]*\\]");
+static const QRegularExpression bbStripRe = QRegularExpression(QStringLiteral("\\[[^\\]]*\\]"));
 
 class TextParseException
 {
@@ -224,19 +224,19 @@ QStringList LyricsSection::bbTag2Html(QString::const_iterator & it, QString tag,
         case 'b':
             if (tag == "b")
             {
-                return QStringList() << "<b>" << "</b>";
+                return QStringList() << QStringLiteral("<b>") << QStringLiteral("</b>");
             }
             break;
         case 'i':
             if (tag == "i")
             {
-                return QStringList() << "<i>" << "</i>";
+                return QStringList() << QStringLiteral("<i>") << QStringLiteral("</i>");
             }
             break;
         case 'u':
             if (tag == "u")
             {
-                return QStringList() << "<u>" << "</u>";
+                return QStringList() << QStringLiteral("<u>") << QStringLiteral("</u>");
             }
             break;
         case 'c':
@@ -246,7 +246,8 @@ QStringList LyricsSection::bbTag2Html(QString::const_iterator & it, QString tag,
                 {
                     throw TextParseException(it, tr("This tag requires an argument"));
                 }
-                return QStringList() << "<span style=\"color: " + arg + "\">" << "</span>";
+                return QStringList() << QStringLiteral("<span style=\"color: ") + arg + QStringLiteral("\">")
+                                     << QStringLiteral("</span>");
             }
             break;
         case 's':
@@ -266,7 +267,8 @@ QStringList LyricsSection::bbTag2Html(QString::const_iterator & it, QString tag,
                 // Convert the number to percentage. A value of 5 indicates 100%, 1 - 50%, 9 - 150%.
                 uint sizeperc = 100 + ((sizeval - 5) * (50.0 / 4.0));
 
-                return QStringList() << "<span style=\"font-size: " + QString::number(sizeperc) + "%\">" << "</span>";
+                return QStringList() << QStringLiteral("<span style=\"font-size: ") + QString::number(sizeperc) + QStringLiteral("%\">")
+                                     << QStringLiteral("</span>");
             }
         default:
             break;

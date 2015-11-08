@@ -74,8 +74,8 @@ QHash<int, QByteArray> LyricsModel::roleNames() const
 {
     QHash<int, QByteArray> names;
 
-    names.insert(LyricsTitleRole, "title");
-    names.insert(LyricsSectionTextRole, "text");
+    names.insert(LyricsTitleRole, QStringLiteral("title"));
+    names.insert(LyricsSectionTextRole, QStringLiteral("text"));
 
     return names;
 }
