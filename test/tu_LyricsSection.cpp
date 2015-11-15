@@ -41,7 +41,7 @@ void TuLyricsSection::construct()
     /* Step 2: Parametrised constructor. */
     try
     {
-        pSection = new LyricsSection(NULL, "test[b]1[/b]", "1", LyricsSection::NoLineWrap);
+        pSection = new LyricsSection("test[b]1[/b]", "1", LyricsSection::NoLineWrap);
         QVERIFY(pSection != NULL);
         QCOMPARE(pSection->text(), QString("test[b]1[/b]"));
         QCOMPARE(pSection->strippedText(), QString("test1"));
@@ -59,7 +59,7 @@ void TuLyricsSection::construct()
     /* Step 2: Parametrised constructor - negative case. */
     try
     {
-        pSection = new LyricsSection(NULL, "test1[/b]", "1", LyricsSection::NoLineWrap);
+        pSection = new LyricsSection("test1[/b]", "1", LyricsSection::NoLineWrap);
         delete pSection;
         QFAIL("TextParseException expected");
     }

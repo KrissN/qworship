@@ -19,13 +19,11 @@
 
 #pragma once
 
-#include <QtCore/QObject>
 #include <QtCore/QString>
 #include <QtCore/QStringList>
 
-class LyricsSection : public QObject
+class LyricsSection
 {
-    Q_OBJECT
 public:
     class TextParseException
     {
@@ -49,8 +47,8 @@ public:
         LeftAlign = 0x0002
     };
 
-    LyricsSection(QObject *pParent = 0);
-    LyricsSection(QObject *pParent, QString text, QString label, SectionFlags flags);
+    LyricsSection();
+    LyricsSection(QString text, QString label, SectionFlags flags);
     ~LyricsSection();
 
     QString text() const { return mText; };
@@ -80,5 +78,6 @@ private:
 
     QString bbParseTag(QString::const_iterator & it, QString::const_iterator end) const;
     QStringList bbTag2Html(QString::const_iterator & it, QString tag, QString arg) const;
+    static QString tr(const char* pText);
 };
 

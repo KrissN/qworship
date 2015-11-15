@@ -19,6 +19,7 @@
 
 #include <QtCore/QRegularExpression>
 #include <QtCore/QDebug>
+#include <QtCore/QCoreApplication>
 
 #include "LyricsSection.h"
 
@@ -34,13 +35,12 @@ public:
     QString msg;
 };
 
-LyricsSection::LyricsSection(QObject *pParent)
-    : QObject(pParent)
+LyricsSection::LyricsSection()
 {
 }
 
-LyricsSection::LyricsSection(QObject *pParent, QString text, QString label, SectionFlags flags)
-    : QObject(pParent), mText(text), mLabel(label), mFlags(flags)
+LyricsSection::LyricsSection(QString text, QString label, SectionFlags flags)
+    : mText(text), mLabel(label), mFlags(flags)
 {
     setText(mText);
 }
@@ -274,4 +274,9 @@ QStringList LyricsSection::bbTag2Html(QString::const_iterator & it, QString tag,
     }
 
     throw InternalTextParseException(it, tr("Unknown tag: ") + tag);
+}
+
+QString LyricsSection::tr(const char* pText)
+{
+    return qApp->translate("LyricsSection", pText);
 }
