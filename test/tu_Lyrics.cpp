@@ -39,7 +39,7 @@ void TuLyrics::construct()
         QFAIL("Unexpected TextParseException thrown");
     }
 
-    LyricsSectionList sectionList;
+    Lyrics::LyricsSectionList sectionList;
     sectionList.append(LyricsSection("test[b]1[/b]", "1", LyricsSection::NoLineWrap));
     QVERIFY(sectionList.size() == 1);
     
