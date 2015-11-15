@@ -1,5 +1,7 @@
 set(QWORSHIP_SOURCES
-  main.cpp)
+  main.cpp
+  Lyrics.cpp
+  LyricsSection.cpp)
 
 file(GLOB QWORSHIP_TRANSLATIONS ${CMAKE_CURRENT_SOURCE_DIR}/lang/*.ts)
 
