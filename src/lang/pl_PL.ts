@@ -9,50 +9,50 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LyricsSection.cpp" line="128"/>
+        <location filename="../LyricsSection.cpp" line="127"/>
         <source>Invalid character in opening tag name: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LyricsSection.cpp" line="135"/>
-        <location filename="../LyricsSection.cpp" line="184"/>
-        <location filename="../LyricsSection.cpp" line="213"/>
+        <location filename="../LyricsSection.cpp" line="134"/>
+        <location filename="../LyricsSection.cpp" line="183"/>
+        <location filename="../LyricsSection.cpp" line="212"/>
         <source>Reached end of string before tag close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LyricsSection.cpp" line="146"/>
+        <location filename="../LyricsSection.cpp" line="145"/>
         <source>Incorrect tag parameter.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LyricsSection.cpp" line="177"/>
+        <location filename="../LyricsSection.cpp" line="176"/>
         <source>Invalid character in closing tag name: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LyricsSection.cpp" line="189"/>
+        <location filename="../LyricsSection.cpp" line="188"/>
         <source>Tag opening/closure mismatch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LyricsSection.cpp" line="220"/>
+        <location filename="../LyricsSection.cpp" line="219"/>
         <source>Empty tag name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LyricsSection.cpp" line="247"/>
-        <location filename="../LyricsSection.cpp" line="258"/>
+        <location filename="../LyricsSection.cpp" line="246"/>
+        <location filename="../LyricsSection.cpp" line="257"/>
         <source>This tag requires an argument</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LyricsSection.cpp" line="264"/>
+        <location filename="../LyricsSection.cpp" line="263"/>
         <source>Font size out of range (1-9)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LyricsSection.cpp" line="277"/>
+        <location filename="../LyricsSection.cpp" line="276"/>
         <source>Unknown tag: </source>
         <translation type="unfinished"></translation>
     </message>

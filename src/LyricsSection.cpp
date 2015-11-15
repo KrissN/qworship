@@ -24,10 +24,10 @@
 
 static const QRegularExpression bbStripRe = QRegularExpression(QStringLiteral("\\[[^\\]]*\\]"));
 
-class TextParseException
+class InternalTextParseException
 {
 public:
-    TextParseException(QString::const_iterator pos, QString msg)
+    InternalTextParseException(QString::const_iterator pos, QString msg)
         : pos(pos), msg(msg)
         {};
     QString::const_iterator pos;
@@ -49,7 +49,7 @@ LyricsSection::~LyricsSection()
 {
 }
 
-int LyricsSection::setText(QString text)
+void LyricsSection::setText(QString text)
 {
     QString str = text;
 
@@ -76,7 +76,7 @@ int LyricsSection::setText(QString text)
                 if (*it == '/')
                 {
                     // No tag closures at top level
-                    throw TextParseException(it, tr("Unmatched tag closure at top level"));
+                    throw InternalTextParseException(it, tr("Unmatched tag closure at top level"));
                 }
                 else
                 {
@@ -96,12 +96,11 @@ int LyricsSection::setText(QString text)
         mText = text;
         mHtmlText = content;
         mStrippedText = str.split('\n', QString::SkipEmptyParts);
-        return -1;
     }
-    catch (TextParseException & x)
+    catch (InternalTextParseException & x)
     {
         qDebug() << "Error parsing text at offset " << x.pos - text.begin() << ": " << x.msg;
-        return x.pos - text.begin();
+        throw TextParseException(x.pos - text.begin(), x.msg);
     }
 }
 
@@ -125,14 +124,14 @@ QString LyricsSection::bbParseTag(QString::const_iterator & it, QString::const_i
         }
         else if (!c.isLetterOrNumber() && (c != '='))
         {
-            throw TextParseException(it, tr("Invalid character in opening tag name: ") + c);
+            throw InternalTextParseException(it, tr("Invalid character in opening tag name: ") + c);
         }
         tag += c;
     }
     if (it == end)
     {
         // Reached end of string before tag close.
-        throw TextParseException(it, tr("Reached end of string before tag close"));
+        throw InternalTextParseException(it, tr("Reached end of string before tag close"));
     }
     QStringList tagval = tag.split('=');
     tag = tagval[0];
@@ -143,7 +142,7 @@ QString LyricsSection::bbParseTag(QString::const_iterator & it, QString::const_i
     }
     else if (tagval.size() > 2)
     {
-        throw TextParseException(it, tr("Incorrect tag parameter."));
+        throw InternalTextParseException(it, tr("Incorrect tag parameter."));
     }
 
 
@@ -174,19 +173,19 @@ QString LyricsSection::bbParseTag(QString::const_iterator & it, QString::const_i
                     }
                     else if (!c.isLetterOrNumber())
                     {
-                        throw TextParseException(it, tr("Invalid character in closing tag name: ") + c);;
+                        throw InternalTextParseException(it, tr("Invalid character in closing tag name: ") + c);;
                     }
                     tag2 += c;
                 }
                 if (it == end)
                 {
                     // Reached end of string before tag close.
-                    throw TextParseException(it, tr("Reached end of string before tag close"));
+                    throw InternalTextParseException(it, tr("Reached end of string before tag close"));
                 }
 
                 if (tag != tag2)
                 {
-                    throw TextParseException(it, tr("Tag opening/closure mismatch"));
+                    throw InternalTextParseException(it, tr("Tag opening/closure mismatch"));
                 }
                 else
                 {
@@ -210,14 +209,14 @@ QString LyricsSection::bbParseTag(QString::const_iterator & it, QString::const_i
     }
 
     // Reached end of string before tag close.
-    throw TextParseException(it, tr("Reached end of string before tag close"));
+    throw InternalTextParseException(it, tr("Reached end of string before tag close"));
 }
 
 QStringList LyricsSection::bbTag2Html(QString::const_iterator & it, QString tag, QString arg) const
 {
     if (tag.isEmpty())
     {
-        throw TextParseException(it, tr("Empty tag name"));
+        throw InternalTextParseException(it, tr("Empty tag name"));
     }
 
     switch (tag[0].toLatin1()) {
@@ -244,7 +243,7 @@ QStringList LyricsSection::bbTag2Html(QString::const_iterator & it, QString tag,
             {
                 if (arg.isEmpty())
                 {
-                    throw TextParseException(it, tr("This tag requires an argument"));
+                    throw InternalTextParseException(it, tr("This tag requires an argument"));
                 }
                 return QStringList() << QStringLiteral("<span style=\"color: ") + arg + QStringLiteral("\">")
                                      << QStringLiteral("</span>");
@@ -255,13 +254,13 @@ QStringList LyricsSection::bbTag2Html(QString::const_iterator & it, QString tag,
             {
                 if (arg.isEmpty())
                 {
-                    throw TextParseException(it, tr("This tag requires an argument"));
+                    throw InternalTextParseException(it, tr("This tag requires an argument"));
                 }
                 bool ok;
                 int sizeval = arg.toInt(&ok);
                 if (!ok || (sizeval > 9) || (sizeval < 1))
                 {
-                    throw TextParseException(it, tr("Font size out of range (1-9)"));
+                    throw InternalTextParseException(it, tr("Font size out of range (1-9)"));
                 }
 
                 // Convert the number to percentage. A value of 5 indicates 100%, 1 - 50%, 9 - 150%.
@@ -274,5 +273,5 @@ QStringList LyricsSection::bbTag2Html(QString::const_iterator & it, QString tag,
             break;
     }
 
-    throw TextParseException(it, tr("Unknown tag: ") + tag);
+    throw InternalTextParseException(it, tr("Unknown tag: ") + tag);
 }

@@ -26,33 +26,47 @@ void TuLyricsSection::construct()
     LyricsSection *pSection;
 
     /* Step 1: Default constructor. */
-    pSection = new LyricsSection();
-    QVERIFY(pSection != NULL);
-    QCOMPARE(pSection->text(), QString(""));
-
-    delete pSection;
+    try
+    {
+        pSection = new LyricsSection();
+        QVERIFY(pSection != NULL);
+        QCOMPARE(pSection->text(), QString(""));
+        delete pSection;
+    }
+    catch (LyricsSection::TextParseException &)
+    {
+        QFAIL("Unexpected TextParseException thrown");
+    }
 
     /* Step 2: Parametrised constructor. */
-    pSection = new LyricsSection(NULL, "test[b]1[/b]", "1", LyricsSection::NoLineWrap);
-    QVERIFY(pSection != NULL);
-    QCOMPARE(pSection->text(), QString("test[b]1[/b]"));
-    QCOMPARE(pSection->strippedText(), QString("test1"));
-    QCOMPARE(pSection->htmlText(), QString("test<b>1</b>"));
-    QCOMPARE(pSection->titleText(), QString("test1"));
-    QCOMPARE(pSection->label(), QString("1"));
-    QCOMPARE(pSection->flags(), LyricsSection::NoLineWrap);
+    try
+    {
+        pSection = new LyricsSection(NULL, "test[b]1[/b]", "1", LyricsSection::NoLineWrap);
+        QVERIFY(pSection != NULL);
+        QCOMPARE(pSection->text(), QString("test[b]1[/b]"));
+        QCOMPARE(pSection->strippedText(), QString("test1"));
+        QCOMPARE(pSection->htmlText(), QString("test<b>1</b>"));
+        QCOMPARE(pSection->titleText(), QString("test1"));
+        QCOMPARE(pSection->label(), QString("1"));
+        QCOMPARE(pSection->flags(), LyricsSection::NoLineWrap);
+        delete pSection;
+    }
+    catch (LyricsSection::TextParseException &)
+    {
+        QFAIL("Unexpected TextParseException thrown");
+    }
 
     /* Step 2: Parametrised constructor - negative case. */
-    pSection = new LyricsSection(NULL, "test1[/b]", "1", LyricsSection::NoLineWrap);
-    QVERIFY(pSection != NULL);
-    QCOMPARE(pSection->text(), QString(""));
-    QCOMPARE(pSection->strippedText(), QString(""));
-    QCOMPARE(pSection->htmlText(), QString(""));
-    QCOMPARE(pSection->titleText(), QString(""));
-    QCOMPARE(pSection->label(), QString("1"));
-    QCOMPARE(pSection->flags(), LyricsSection::NoLineWrap);
-
-    delete pSection;
+    try
+    {
+        pSection = new LyricsSection(NULL, "test1[/b]", "1", LyricsSection::NoLineWrap);
+        delete pSection;
+        QFAIL("TextParseException expected");
+    }
+    catch (LyricsSection::TextParseException &x)
+    {
+        QVERIFY(x.pos == 6);
+    }
 }
 
 void TuLyricsSection::setText_data()
@@ -235,7 +249,16 @@ void TuLyricsSection::setText()
     pSection = new LyricsSection();
     QVERIFY(pSection != NULL);
 
-    QCOMPARE(pSection->setText(rawText), status);
+    try
+    {
+        pSection->setText(rawText);
+        QVERIFY2(status == -1, "TextParseException expected");
+    }
+    catch (LyricsSection::TextParseException &x)
+    {
+        QVERIFY2(status != -1, "Unexpected TextParseException");
+        QCOMPARE(x.pos, status);
+    }
 
     if (status == -1)
     {
@@ -256,9 +279,24 @@ void TuLyricsSection::setBadText()
     LyricsSection *pSection = new LyricsSection();
     QVERIFY(pSection != NULL);
 
-    QCOMPARE(pSection->setText("test[b]1[/b]"), -1);
+    try
+    {
+        pSection->setText("test[b]1[/b]");
+    }
+    catch (LyricsSection::TextParseException &)
+    {
+        QFAIL("Unexpected TextParseException");
+    }
 
-    QCOMPARE(pSection->setText("test[/b]"), 5);
+    try
+    {
+        pSection->setText("test[/b]");
+        QFAIL("TextParseException expected");
+    }
+    catch (LyricsSection::TextParseException &x)
+    {
+        QCOMPARE(x.pos, 5);
+    }
 
     QCOMPARE(pSection->text(), QString("test[b]1[/b]"));
     QCOMPARE(pSection->strippedText(), QString("test1"));

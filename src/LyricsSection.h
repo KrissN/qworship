@@ -27,6 +27,16 @@ class LyricsSection : public QObject
 {
     Q_OBJECT
 public:
+    class TextParseException
+    {
+    public:
+        TextParseException(int pos, QString msg)
+            : pos(pos), msg(msg)
+        {};
+        int pos;
+        QString msg;
+    };
+
     enum SectionFlags
     {
         // By default the section lines are wrapped in case doing so makes it possible
@@ -54,7 +64,7 @@ public:
     // Returns a rich text using HTML markup
     QString htmlText() const { return mHtmlText; };
 
-    int setText(QString text);
+    void setText(QString text);
 private:
     // The section content.
     QString mText;
