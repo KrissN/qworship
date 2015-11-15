@@ -25,7 +25,27 @@ class TuLyricsSection : public QObject
 {
     Q_OBJECT
 private slots:
+    /**
+     *  @brief  LyricsSection construction test.
+     *
+     *  Constructs a LyricsSection object and verifies that the new object has the expected
+     *  properties.
+     */
     void construct();
+
+    /**
+     *  @brief  LyricsSection text setting test.
+     *
+     *  Attempts to set various text to the lyrics section verifying the expected status code
+     *  and all of the text-related properties (raw, HTML, stripped and title text).
+     */
     void setText();
     void setText_data();
+
+    /**
+     *  @brief  Invalid text setting test.
+     *
+     *  Verifies that setting an invalid text preserves the text that was set previously.
+     */
+    void setBadText();
 };
