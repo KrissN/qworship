@@ -27,18 +27,19 @@
 class Lyrics
 {
 public:
+    typedef QList<LyricsSection> LyricsSectionList;
+
     Lyrics();
     Lyrics(quint32 id, QList<LyricsSection> sections, QString title);
     ~Lyrics();
 
     quint32 id() const { return mId; };
-    QList<LyricsSection> sections() const { return mSections; };
+    LyricsSectionList sections() { return mSections; };
     QString title() const;
 private:
     quint32 mId;
     QString mTitle;
-    QList<LyricsSection> mSections;
+    LyricsSectionList mSections;
 
     static quint32 mMaxId;
 };
-

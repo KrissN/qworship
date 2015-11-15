@@ -29,8 +29,28 @@ Lyrics::Lyrics()
 Lyrics::Lyrics(quint32 id, QList<LyricsSection> sections, QString title)
     : mId(id), mTitle(title), mSections(sections)
 {
+    mMaxId = qMax(id, mMaxId);
 }
 
 Lyrics::~Lyrics()
 {
+}
+
+QString Lyrics::title() const
+{
+    if (mTitle.isEmpty())
+    {
+        if (mSections.isEmpty())
+        {
+            return QStringLiteral("");
+        }
+        else
+        {
+            return mSections[0].titleText();
+        }
+    }
+    else
+    {
+        return mTitle;
+    }
 }
